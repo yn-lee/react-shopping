@@ -12,7 +12,34 @@ const config = {
   measurementId: "G-F8GHLTN4T4"
 };
 
-firebase.initializeApp(config);
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+  if (!userAuth) return;
+
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  const snapShot = await userRef.get();
+
+  if (!snapShot.exists) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+
+    try {
+      await userRef.set({
+        displayName,
+        email,
+        createdAt,
+        ...additionalData
+      });
+    } catch (err) {
+      console.log("err !", err.message);
+    }
+  }
+  return userRef;
+};
+
+//Firebase: Firebase App named '[DEFAULT]' already exists (app/duplicate-app).
+//firebase를 한번 초기화를 하고 page에서 firebase가 호출이 되었을 떄, 초기화 한 값이 있어서 중복 error가 발생
+//해결
+!firebase.apps.length ? firebase.initializeApp(config) : firebase.app();
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();

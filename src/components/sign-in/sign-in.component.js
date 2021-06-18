@@ -10,6 +10,7 @@ import "./sign-in.styles.scss";
 class SignIn extends React.Component {
   constructor() {
     super();
+
     this.state = {
       email: "",
       password: ""
@@ -26,8 +27,7 @@ class SignIn extends React.Component {
   };
 
   handleChange = (e) => {
-    const { value, name } = e.target.value;
-
+    const { value, name } = e.target;
     this.setState({ [name]: value });
   };
 
@@ -44,7 +44,7 @@ class SignIn extends React.Component {
             value={this.state.email}
             onChange={this.handleChange}
             label="email"
-            required
+            // required
           />
           <FormInput
             name="password"
